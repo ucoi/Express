@@ -1,27 +1,12 @@
-const http = require("http");
-const { readFileSync } = require("fs");
+const express = require("express");
+const path = require("path");
+const app = express();
 
-// get all files
-const homePage = readFileSync("./navbar-app/index.html");
-const homeStyles = readFileSync("./navbar-app/styles.css");
-const homeImage = readFileSync("./navbar-app/logo.svg");
-const homeLogic = readFileSync("./navbar-app/browser-app.js");
+app.use(express.static("./Public"));
 
-const server = http
-  .createServer((req, res) => {
-    const url = req.url;
-    if (url === "/") {
-      res.writeHead(200, { "content-type": "text/html" });
-      res.write(homePage);
-      res.end();
-    } else if (url === "/about") {
-      res.writeHead(200, { "content-type": "text/html" });
-      res.write("<h1>About Page</h1>");
-      res.end();
-    } else {
-      res.writeHead(404, { "content-type": "text/html" });
-      res.write("<h1>page not found</h1>");
-      res.end();
-    }
-  })
-  .listen(3000);
+app.all("*", (req, res) => {
+  res.status(404).send("<h1>Resource not found</h1>");
+});
+app.listen(8080, () => {
+  console.log("Server is listening on port 8080");
+});
